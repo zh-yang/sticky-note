@@ -1,5 +1,6 @@
 require('less/note.less');
 
+var $ = require('jquery')
 var Toast = require('./toast.js').Toast;
 var Event = require('mod/event.js');
 
@@ -34,10 +35,12 @@ Note.prototype = {
 
   createNote: function () {
     var tpl =  '<div class="note">'
-              + '<div class="note-head"><span class="delete">&times;</span></div>'
+              + '<div class="note-head"><span class="username"></span><span class="delete">&times;</span></div>'
               + '<div class="note-ct" contenteditable="true"></div>'
               +'</div>';
     this.$note = $(tpl);
+    //console.log(this.opts,this.opts.uname)
+    this.$note.find('.note-head>.username').html(this.opts.uname+':说')
     this.$note.find('.note-ct').html(this.opts.context);
     this.opts.$ct.append(this.$note);
     if(!this.id)  this.$note.css('bottom', '10px');  //新增放到右边
@@ -105,7 +108,7 @@ Note.prototype = {
 
   edit: function (msg) {
     var self = this;
-    $.post('/api/notes/edit',{
+    $.post('/api/note/edit',{
         id: this.id,
         note: msg
       }).done(function(ret){
@@ -118,9 +121,8 @@ Note.prototype = {
   },
 
   add: function (msg){
-    console.log('addd...');
     var self = this;
-    $.post('/api/notes/add', {note: msg})
+    $.post('/api/note/add', {note: msg})
       .done(function(ret){
         if(ret.status === 0){
           Toast('add success');
@@ -135,7 +137,7 @@ Note.prototype = {
 
   delete: function(){
     var self = this;
-    $.post('/api/notes/delete', {id: this.id})
+    $.post('/api/note/delete', {id: this.id})
       .done(function(ret){
         if(ret.status === 0){
           Toast('delete success');

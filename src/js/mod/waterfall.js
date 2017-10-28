@@ -1,10 +1,14 @@
+var $ = require('jquery')
 var WaterFall = (function(){
   var $ct;
   var $items;
 
   function render($c){
+    if(!$c)return;
     $ct = $c;
-    $items = $ct.children();
+    $items = $ct.children() ? $ct.children() : null;
+
+    if(!$items)return;
 
     var nodeWidth = $items.outerWidth(true),
       colNum = parseInt($(window).width()/nodeWidth),
